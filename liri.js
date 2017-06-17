@@ -8,32 +8,10 @@ var inputs = process.argv;
 var searchTerm = "";
 
 
-
 for (let i = 3; i < inputs.length; i++) {
     searchTerm = searchTerm + inputs[i] + " ";
 }
 var newSearch = searchTerm.trim();
-
-if (command === "do-what-it-says") {
-    doWhat();
-    console.log(command);
-    console.log(newSearch);
-    switch (command) {
-        case "my-tweets":
-            getTweets();
-            break;
-        case "spotify-this-song":
-            getSpotify();
-            break;
-        case "movie-this":
-            getMovie();
-            break;
-
-        default:
-            console.log("Not valid");
-    }
-}
-
 
 function getTweets() {
     var client = new Twitter({
@@ -90,7 +68,6 @@ function getSpotify() {
 }
 
 function getMovie() {
-
     var movieInput = newSearch.replace(" ", "+");
     if (newSearch === "") {
         movieInput = "Mr. Nobody";
@@ -100,7 +77,6 @@ function getMovie() {
     request(query, function(error, response, body) {
         if (!error) {
             var movieObject = JSON.parse(body);
-            // console.log(movieObject);
             var movieTitle = movieObject.Title;
             console.log("Title:         " + movieTitle);
             var year = movieObject.Year;
@@ -123,32 +99,42 @@ function getMovie() {
 
 function doWhat() {
     fs.readFile("random.txt", "utf8", function(error, data) {
-
         if (error) {
             return console.log(error);
         }
         var dataArr = data.split(",");
         command = dataArr[0];
-        console.log("command  " + command);
         newSearch = dataArr[1];
-        console.log("newSearch  " + newSearch);     
 
+        switch (command) {
+            case "my-tweets":
+                getTweets();
+                break;
+            case "spotify-this-song":
+                getSpotify();
+                break;
+            case "movie-this":
+                getMovie();
+                break;
+            default:
+                console.log("Enter a valid command");
+        }
     });
 }
 
-    switch (command) {
-        case "my-tweets":
-            getTweets();
-            break;
-        case "spotify-this-song":
-            getSpotify();
-            break;
-        case "movie-this":
-            getMovie();
-            break;
-        case "do-what-it-says":
-            break;
-
-        default:
-            console.log("Enter a valid command");
-    }
+switch (command) {
+    case "my-tweets":
+        getTweets();
+        break;
+    case "spotify-this-song":
+        getSpotify();
+        break;
+    case "movie-this":
+        getMovie();
+        break;
+    case "do-what-it-says":
+        doWhat();
+        break;
+    default:
+        console.log("Enter a valid command");
+}
