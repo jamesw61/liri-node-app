@@ -8,14 +8,32 @@ var inputs = process.argv;
 var searchTerm = "";
 
 
-if (command === "do-what-it-says") {
-    doWhat();
-}
 
 for (let i = 3; i < inputs.length; i++) {
     searchTerm = searchTerm + inputs[i] + " ";
 }
 var newSearch = searchTerm.trim();
+
+if (command === "do-what-it-says") {
+    doWhat();
+    console.log(command);
+    console.log(newSearch);
+    switch (command) {
+        case "my-tweets":
+            getTweets();
+            break;
+        case "spotify-this-song":
+            getSpotify();
+            break;
+        case "movie-this":
+            getMovie();
+            break;
+
+        default:
+            console.log("Not valid");
+    }
+}
+
 
 function getTweets() {
     var client = new Twitter({
@@ -113,25 +131,9 @@ function doWhat() {
         command = dataArr[0];
         console.log("command  " + command);
         newSearch = dataArr[1];
-        console.log("newSearch  " + newSearch);
-
-         switch (command) {
-        case "my-tweets":
-            getTweets();
-            break;
-        case "spotify-this-song":
-            getSpotify();
-            break;
-        case "movie-this":
-            getMovie();
-            break;
-
-        default:
-            console.log("Enter a valid command");
-    }
+        console.log("newSearch  " + newSearch);     
 
     });
-
 }
 
     switch (command) {
@@ -143,6 +145,8 @@ function doWhat() {
             break;
         case "movie-this":
             getMovie();
+            break;
+        case "do-what-it-says":
             break;
 
         default:
