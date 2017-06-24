@@ -21,7 +21,7 @@ function getTweets() {
         access_token_secret: keys.twitterKeys.access_token_secret
     });
     var params = {
-        'count': 1,
+        'count': 5,
     }
 
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -30,10 +30,7 @@ function getTweets() {
         } else {
             var str = JSON.stringify(tweets, null, 2);
             for (var i = 0; i < tweets.length; i++) {
-                console.log("-");
-                console.log(tweets[i].text);
-                console.log(tweets[i].created_at);
-                console.log("-");
+                console.log("\n\n" + tweets[i].text + "\n" + tweets[i].created_at + "\n\n");
             }
         }
     });
@@ -60,39 +57,48 @@ function getSpotify() {
         var songName = data.tracks.items[0].name;
         var preview = data.tracks.items[0].preview_url;
 
-        console.log("Artist:       " + bandName);
-        console.log("Album:        " + albumName);
-        console.log("Preview:      " + preview);
-        console.log("Name of Song: " + songName);
+        console.log("\n\nArtist:       " + bandName + "\nAlbum:        " + albumName + "\nPreview:      " + preview + "\nName of Song: " + songName + "\n\n");
     });
 }
 
 function getMovie() {
-    var movieInput = newSearch.replace(" ", "+");
     if (newSearch === "") {
-        movieInput = "Mr. Nobody";
+        newSearch = "Mr. Nobody";
     }
-    var movieSearch = movieInput.replace(/\./g, ' ');
+    var movieSearch = newSearch.replace(/\./g, '').replace(/ /g, "+");
     var query = "http://www.omdbapi.com/?apikey=40e9cece&r=json&t=" + movieSearch;
     request(query, function(error, response, body) {
         if (!error) {
             var movieObject = JSON.parse(body);
             var movieTitle = movieObject.Title;
-            console.log("Title:         " + movieTitle);
             var year = movieObject.Year;
-            console.log("Year:          " + year);
             var rating = movieObject.Ratings[0].Value;
-            console.log("IMDB rating:   " + rating);
             var country = movieObject.Country;
-            console.log("Country:       " + country);
             var language = movieObject.Language;
-            console.log("Language:      " + language);
             var plot = movieObject.Plot;
-            console.log("Plot:          " + plot);
             var actors = movieObject.Actors;
-            console.log("Actors:        " + actors);
+            console.log("\n\nTitle:         " + movieTitle + "\nYear:          " + year + "\nIMDB rating:   " + rating +
+                "\nCountry:       " + country + "\nLanguage:      " + language + "\nPlot:          " + plot +
+                "\nActors:        " + actors + "\n\n");
+            var loggedMovie = "\n\nTitle:         " + movieTitle + "\nYear:          " + year + "\nIMDB rating:   " + rating +
+                "\nCountry:       " + country + "\nLanguage:      " + language + "\nPlot:          " + plot +
+                "\nActors:        " + actors + "\n\n"
+
+            fs.appendFile('log.txt', loggedMovie, (err) => {
+                if (err) throw err;
+                console.log('The movie was appended to file!');
+            });
+
+
+
+            // console.log("\nYear:          " + year);
+            // console.log("\nIMDB rating:   " + rating);
+            // console.log("\nCountry:       " + country);
+            // console.log("\nLanguage:      " + language);
+            // console.log("\nPlot:          " + plot);
+            // console.log("\nActors:        " + actors + "\n\n");
         } else if (err) {
-            console.log("Error:   " + err);
+            console.log("\nError:   " + err + "\n\n");
         }
     });
 }
@@ -105,7 +111,6 @@ function doWhat() {
         var dataArr = data.split(",");
         command = dataArr[0];
         newSearch = dataArr[1];
-
         switch (command) {
             case "my-tweets":
                 getTweets();
