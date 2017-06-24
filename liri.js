@@ -89,14 +89,6 @@ function getMovie() {
                 console.log('The movie was appended to file!');
             });
 
-
-
-            // console.log("\nYear:          " + year);
-            // console.log("\nIMDB rating:   " + rating);
-            // console.log("\nCountry:       " + country);
-            // console.log("\nLanguage:      " + language);
-            // console.log("\nPlot:          " + plot);
-            // console.log("\nActors:        " + actors + "\n\n");
         } else if (err) {
             console.log("\nError:   " + err + "\n\n");
         }
